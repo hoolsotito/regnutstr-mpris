@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="no">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <style>
+            body {
+                text-align: center;
+            }
+            #tabell{
+                margin: 0 auto;
+                gap: 50px;
+                background-color: white;
+                border: solid 2px black;
+                padding: 5px;
+                border-collapse: collapse;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>Regn ut strømpris</h1>
+        <form id="registrer">
+            <label><h3>kwt pr. månad</h3></label>
+            <input id="kwt" type="number" required step="any">
+        
+            <br><br>
+            <label for="manad"><h3>Velg månad</h3></label>
+            <input id="manad" type="text" required list="manader">
+            <datalist id="manader">
+                <option id="januar">Januar</option>
+                <option id="februar">Februar</option>
+                <option id="mars">Mars</option>
+                <option id="april">April</option>
+                <option id="mai">Mai</option>
+                <option id="juni">Juni</option>
+                <option id="juli">Juli</option>
+                <option id="august">August</option>
+                <option id="september">September</option>
+                <option id="oktober">Oktober</option>
+                <option id="november">November</option>
+                <option id="desember">Desember</option>
+            </datalist>
+            <br><br>
+            <button type="submit">
+                Registrer
+            </button>
+        </form>
+        <br>
+        <div id="liste">
+            <table id="tabell"></table>
+        </div>
+
+        <div id="total">
+
+        </div>
+        <div id="gjennomsnits">
+
+        </div>
+        
+        <script>
+
+            //Ulike variabler
+            var registrer = document.getElementById("registrer");
+            var manad = document.getElementById("manad");
+            var kwt = document.getElementById("kwt");
+            var prisKwt = 1.45;
+            var regKwt = [];
+
+            //Registrere Månad og Kwt
+            registrer.onsubmit = function(evt){
+                evt.preventDefault(); // Vera på sida
+
+                // Legg til dei ulike verdiane i regKwt Array
+                regKwt.push({Manad: manad.value, Kwt: kwt.value});
+
+                //Kalle opp funksjonen visBody
+                visIBody();
+
+                // Nullstille inputbokser
+                manad.value = "";
+                kwt.value = "";
+
+
+            }
+
+            //Ein funksjon for å lage liste, tabell. Rekne ut pris, kwt og gjennomsnitt
+            function visIBody(){
+
+                //NUllstiller tabell i HTML element
+                tabell.innerHTML = "";
+
+                //Diverse variabler
+                var sumKwt = 0;
+                var sumPris = 0;
+
+                //Henter ut element frå inputfelta og rekner ut pris
+                for(var el of regKwt){
+                    if (regKwt.length > 0){
+
+                        //Skriver ut element
+                        tabell.innerHTML += "<tr><td class='td'>" +el.Manad+ "</td>"+"<td class='td'><p>pris: " +Number(el.Kwt) * prisKwt+ " kr.</p></td>"+ "<td class='td'><p>Kwt: " +el.Kwt+ "</p></td></tr>";
+
+                        //Rekner ut pris og kwt totalt
+                        sumKwt += Number(el.Kwt);
+                        sumPris += Number(el.Kwt) * prisKwt;
+
+                        //Skriver ut element
+                        total.innerHTML = "<p>Total pris: "+ sumPris +"<br>Total Kwt: " +sumKwt +"</p>";
+
+
+                    }
+                    else{
+                        regKwt.innerHTML = "unvisable";
+                    }
+                }
+
+                //Variabel
+                var antallmanad = 0;
+
+                //Rekner ut gjennomsnitt pris og kwt
+                for(var tal of regKwt) {
+
+                    //Skjekker om input er samme som månadene, vist det er det teller den opp 1
+                    if(tal.manad === "januar"||tal.manad ==="februar"||tal.manad ==="mars"||tal.manad === "april"||tal.manad ==="mai"||tal.manad ==="juni"||tal.manad ==="juli"||tal.manad ==="august"||tal.manad ==="september"||tal.manad ==="oktober"||tal.manad ==="november"||tal.manad ==="desember");
+                        
+                        //Teller opp 1
+                        antallmanad++
+
+                        //Skriver ut element
+                        gjennomsnits.innerHTML = "<p>Gjennomsnitt pris: "+ sumPris / antallmanad +"<br>Gjennomsnitt Kwt: "+ sumKwt / antallmanad+ "</p>";
+
+                    }
+            }
+
+
+        </script>
+    </body>
+</html>
